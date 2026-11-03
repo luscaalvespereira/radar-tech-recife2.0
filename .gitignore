@@ -1,0 +1,45 @@
+# Ambientes Virtuais Python
+.venv/
+venv/
+ENV/
+env/
+
+# Arquivos de Variáveis de Ambiente e Segredos (NUNCA SUBIR AO GITHUB)
+.env
+*.env
+!.env.example
+
+# Bancos de Dados Locais e Arquivos Temporários
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+*.db
+*.sqlite
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Configurações e Cache da Vercel
+.vercel/
+
+# Pasta de Staging / Upload Manual
+000 - Subir no GitHub/
+
+# Logs do Sistema
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos do Sistema Operacional e IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+
+# Pasta de Staging / Upload Manual
+000 - Subir no GitHub/

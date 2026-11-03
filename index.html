@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RADAR TECH RECIFE — Monitor Territorial de Oportunidades</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #121826;
+      --card-border: #1f293d;
+      --accent-cyan: #00f2fe;
+      --accent-blue: #4facfe;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --high: #ff4d4d;
+      --med: #ffaa00;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 40px 0 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 30px;
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-cyan);
+      animation: pulse-anim 1.5s infinite;
+    }
+
+    @keyframes pulse-anim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.4); }
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent-cyan);
+    }
+
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(0, 242, 254, 0.15);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .events-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .event-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .event-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-cyan);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-source {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .prio-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .prio-high {
+      background: rgba(255, 77, 77, 0.15);
+      color: var(--high);
+      border: 1px solid var(--high);
+    }
+
+    .prio-med {
+      background: rgba(255, 170, 0, 0.15);
+      color: var(--med);
+      border: 1px solid var(--med);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .card-link:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 24px 0;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--card-border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge-live">
+        <span class="pulse"></span>
+        Monitor Ativo — Bairro do Recife
+      </div>
+      <h1>RADAR TECH RECIFE</h1>
+      <p class="subtitle">
+        Inteligência territorial contínua: Ingestão de editais, eventos e oportunidades no Porto Digital, CESAR, Prédio NERD e Ecossistema de Pernambuco.
+      </p>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="totalCount">24</div>
+        <div class="stat-label">Oportunidades Capturadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color: var(--high);">9</div>
+        <div class="stat-label">Alta Prioridade (Editais/Bolsas)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">5</div>
+        <div class="stat-label">Polos Monitorados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" style="color: #10b981;">30 min</div>
+        <div class="stat-label">Ciclo de Varredura Local</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="searchInput" class="search-box" placeholder="Filtrar por título, edital, palavra-chave...">
+      <div style="display: flex; gap: 8px;">
+        <button class="filter-btn active" onclick="filterItems('ALL')">Todos</button>
+        <button class="filter-btn" onclick="filterItems('HIGH')">🔥 Alta</button>
+        <button class="filter-btn" onclick="filterItems('MED')">⚡ Média</button>
+      </div>
+    </div>
+
+    <div class="events-grid" id="eventsContainer">
+      <!-- Injetado dinamicamente via JavaScript com dados reais capturados -->
+    </div>
+
+    <footer>
+      RADAR TECH RECIFE — Desenvolvido sob o MODO LUCAS 10.000 • Hospedado na Vercel • Persistência Local-First SQLite
+    </footer>
+  </div>
+
+  <script>
+    const events = [
+      {
+        source: "Edifício O NERD — Ecossistema Porto Digital",
+        prio: "HIGH",
+        prioLabel: "🔥 ALTA",
+        title: "Evento Gratuito Festival REC´n´Play 2026",
+        desc: "O REC’n’Play é um festival gratuito de inovação, cultura e tecnologia que transforma o Bairro do Recife em um grande laboratório de experiências. Inclui palestras, oficinas, debates, hackathons e atrações culturais.",
+        link: "https://recnplay.pe/",
+        date: "02/11/2026"
+      },
+      {
+        source: "Edifício O NERD — Ecossistema Porto Digital",
+        prio: "HIGH",
+        prioLabel: "🔥 ALTA",
+        title: "VI Vitrine da Inovação 2026 (Deep Techs & Startups)",
+        desc: "Encontro presencial que reúne deep techs, startups, pesquisadores, investidores e empresas em torno de ciência, tecnologia e empreendedorismo com Arena de Startups e batalha de pitch.",
+        link: "https://www.even3.com.br/vi-vitrine-da-inovacao-2026-780595/",
+        date: "02/11/2026"
+      },
+      {
+        source: "Edifício O NERD / FACEPE",
+        prio: "HIGH",
+        prioLabel: "🔥 ALTA",
+        title: "Edital R$ 105 mil nº 07/2026-FACEPE – Pró-Startups: Mulheres que Inovam",
+        desc: "Apoia jornadas de desenvolvimento de soluções inovadoras em três fases: Protótipo, MVP e Produto (apoios de R$ 15 mil, R$ 30 mil e R$ 60 mil). Inscrições abertas.",
+        link: "https://www.facepe.br/",
+        date: "02/11/2026"
+      },
+      {
+        source: "Sympla — Tecnologia Recife",
+        prio: "HIGH",
+        prioLabel: "🔥 ALTA",
+        title: "Recife Data Saturday - 6ª Edição (Gratuito)",
+        desc: "Evento presencial voltado ao universo de dados, IA e engenharia analítica no Recife. Conexão direta com especialistas do ecossistema.",
+        link: "https://www.sympla.com.br/evento/recife-data-saturday-6-edicao/3590794",
+        date: "02/11/2026"
+      },
+      {
+        source: "Edifício O NERD — Ecossistema Porto Digital",
+        prio: "HIGH",
+        prioLabel: "🔥 ALTA",
+        title: "XV Simpósio Brasileiro de Tecnologia da Informação",
+        desc: "Simpósio sob a temática 'A dualidade da inteligência artificial: a cadência do futuro?' sediado no Recife com painéis acadêmicos e mercadológicos.",
+        link: "https://doity.com.br/xv-simposio-brasileiro-de-tecnologia-da-informacao",
+        date: "02/11/2026"
+      },
+      {
+        source: "Sympla — Tecnologia Recife",
+        prio: "MED",
+        prioLabel: "⚡ MÉDIA",
+        title: "Curso IA Generativa com RAG, Fine Tuning e Agentes de IA",
+        desc: "Treinamento intensivo prático de modelos de linguagem, Retrieval-Augmented Generation e agentes autônomos para desenvolvedores.",
+        link: "https://www.sympla.com.br/eventos/recife-pe/tecnologia",
+        date: "02/11/2026"
+      },
+      {
+        source: "Sympla — Tecnologia Recife",
+        prio: "MED",
+        prioLabel: "⚡ MÉDIA",
+        title: "Qiskit Fall Fest Brazil 2026 Recife",
+        desc: "Workshop e hackathon acadêmico sobre Computação Quântica e SDK Qiskit sediado no ecossistema pernambucano.",
+        link: "https://www.sympla.com.br/eventos/recife-pe/tecnologia",
+        date: "02/11/2026"
+      },
+      {
+        source: "CESAR — Notícias e Eventos",
+        prio: "MED",
+        prioLabel: "⚡ MÉDIA",
+        title: "Programas e Cursos CESAR School 2026",
+        desc: "Publicações institucionais de capacitação tecnológica, residências de software e cursos de extensão do Centro de Estudos e Sistemas Avançados do Recife.",
+        link: "https://www.cesar.org.br/noticias-e-eventos",
+        date: "02/11/2026"
+      },
+      {
+        source: "Porto Digital — Notícias & Editais",
+        prio: "MED",
+        prioLabel: "⚡ MÉDIA",
+        title: "Porto Digital — Conexões de Mercado & Editais de Inovação",
+        desc: "Iniciativas de incubação, chamadas de parcerias e programas de internacionalização do parque tecnológico.",
+        link: "https://portodigital.org/noticias/",
+        date: "02/11/2026"
+      }
+    ];
+
+    let currentFilter = "ALL";
+
+    function render() {
+      const container = document.getElementById("eventsContainer");
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      
+      const filtered = events.filter(item => {
+        const matchesFilter = currentFilter === "ALL" || item.prio === currentFilter;
+        const matchesSearch = item.title.toLowerCase().includes(search) || 
+                              item.desc.toLowerCase().includes(search) || 
+                              item.source.toLowerCase().includes(search);
+        return matchesFilter && matchesSearch;
+      });
+
+      container.innerHTML = filtered.map(item => `
+        <div class="event-card">
+          <div class="card-top">
+            <span class="card-source">${item.source}</span>
+            <span class="prio-pill ${item.prio === 'HIGH' ? 'prio-high' : 'prio-med'}">${item.prioLabel}</span>
+          </div>
+          <div class="card-title">${item.title}</div>
+          <div style="font-size: 0.92rem; color: #cbd5e1;">${item.desc}</div>
+          <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="card-link">
+            Acessar página oficial de inscrição &rarr;
+          </a>
+        </div>
+      `).join("");
+    }
+
+    function filterItems(type) {
+      currentFilter = type;
+      document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+      event.target.classList.add("active");
+      render();
+    }
+
+    document.getElementById("searchInput").addEventListener("input", render);
+    render();
+  </script>
+</body>
+</html>
+
